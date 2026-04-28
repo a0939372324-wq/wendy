@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>三浦鍋爐效率比較頁面</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #005bbb;
+      --accent: #00a0e9;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --good: #0f9d58;
+      --warn: #d97706;
+      --border: #e5e7eb;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+      background: linear-gradient(180deg, #eff6ff 0%, var(--bg) 40%, #ffffff 100%);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .container {
+      width: min(1080px, 92vw);
+      margin: 0 auto;
+      padding: 32px 0 60px;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      color: #fff;
+      padding: 36px 28px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(0, 91, 187, 0.25);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+    }
+
+    .hero p { margin: 0; opacity: 0.95; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+
+    .kpi {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(2, 6, 23, 0.05);
+    }
+
+    .kpi .label { font-size: 0.9rem; color: var(--muted); }
+    .kpi .value {
+      margin-top: 6px;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    h2 {
+      margin-top: 0;
+      font-size: 1.2rem;
+      border-left: 4px solid var(--accent);
+      padding-left: 10px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: top;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #0f172a;
+    }
+
+    tr:last-child td { border-bottom: none; }
+
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-right: 5px;
+    }
+
+    .good { background: #e8f5e9; color: var(--good); }
+    .warn { background: #fff7ed; color: var(--warn); }
+
+    .note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-top: 10px;
+    }
+
+    ul { padding-left: 20px; margin: 8px 0; }
+
+    footer {
+      margin-top: 26px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <section class="hero">
+      <h1>三浦鍋爐（Miura）效率與其他鍋爐廠差異比較</h1>
+      <p>
+        這是一個簡報型比較頁，協助工廠、食品廠與旅宿業在評估「蒸汽效率、運轉成本、維護便利性」時快速掌握重點。
+      </p>
+    </section>
+
+    <section class="grid">
+      <article class="kpi">
+        <div class="label">熱效率（一般油／氣蒸汽鍋爐）</div>
+        <div class="value">Miura 常見：90%–96%</div>
+      </article>
+      <article class="kpi">
+        <div class="label">一般傳統鍋爐</div>
+        <div class="value">常見：82%–90%</div>
+      </article>
+      <article class="kpi">
+        <div class="label">啟停反應時間</div>
+        <div class="value">Miura 多採快啟設計</div>
+      </article>
+      <article class="kpi">
+        <div class="label">能源管理彈性</div>
+        <div class="value">多台並聯控制優勢</div>
+      </article>
+    </section>
+
+    <section class="card">
+      <h2>核心差異總覽</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>比較項目</th>
+            <th>三浦鍋爐（Miura）</th>
+            <th>其他常見鍋爐廠（傳統方案）</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>燃燒效率</td>
+            <td><span class="badge good">優勢</span>高效率燃燒與換熱設計，部分機型可搭配節能回收模組。</td>
+            <td><span class="badge warn">一般</span>效率視機型與控制系統而異，舊設備通常偏低。</td>
+          </tr>
+          <tr>
+            <td>啟動速度</td>
+            <td><span class="badge good">優勢</span>快啟快停，有利間歇性用汽情境，降低待機耗能。</td>
+            <td><span class="badge warn">一般</span>暖機時間較長，若低負載常開可能增加浪費。</td>
+          </tr>
+          <tr>
+            <td>部分負載效率</td>
+            <td><span class="badge good">優勢</span>多台小容量並聯切換，負載追隨能力較佳。</td>
+            <td><span class="badge warn">一般</span>單台大容量在低負載時效率下降較明顯。</td>
+          </tr>
+          <tr>
+            <td>維護與監控</td>
+            <td>通常支援遠端監控、警報管理與預防保養機制。</td>
+            <td>依品牌而異，部分需要人工巡檢比例較高。</td>
+          </tr>
+          <tr>
+            <td>初期建置成本</td>
+            <td>可能較高，但可透過燃料節省回收投資。</td>
+            <td>初期採購可能較低，但長期能源與維護成本需評估。</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note">※ 實際效率與成本會依燃料別、蒸汽壓力、回收系統、操作習慣與保養品質而有差異。</p>
+    </section>
+
+    <section class="card">
+      <h2>選型建議（台灣常見工業情境）</h2>
+      <ul>
+        <li><strong>用汽量波動大：</strong>建議評估快啟＋多台並聯系統，降低低負載時的空耗。</li>
+        <li><strong>24 小時連續生產：</strong>重點在穩定性、備援能力與維護效率，不只看單點效率。</li>
+        <li><strong>有 ESG / 碳盤查需求：</strong>優先考慮可監控燃料效率與排放數據的方案。</li>
+        <li><strong>投資評估：</strong>以「總持有成本（TCO）」比較 3~7 年燃料＋保養＋停機風險。</li>
+      </ul>
+    </section>
+
+    <footer>
+      建議下一步：可再加入「年度燃料費試算器」與「不同品牌 ROI 圖表」做互動式決策。
+    </footer>
+  </main>
+</body>
+</html>
