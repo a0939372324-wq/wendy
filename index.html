@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>三浦蒸汽鍋爐 vs 其他鍋爐廠：燃燒效率比較</title>
+  <style>
+    :root {
+      --bg: #0b1220;
+      --card: #121b2f;
+      --muted: #9fb3d1;
+      --text: #eef4ff;
+      --accent: #5ab1ff;
+      --good: #39d98a;
+      --warn: #ffd166;
+      --line: #22314f;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background: linear-gradient(150deg, #0b1220 0%, #0f1b31 100%);
+      min-height: 100vh;
+    }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 28px 18px 54px; }
+    h1 { margin: 0 0 10px; font-size: clamp(1.4rem, 2vw, 2rem); }
+    p { color: var(--muted); line-height: 1.65; }
+    .grid { display: grid; gap: 16px; }
+    @media (min-width: 920px) { .grid.cols-2 { grid-template-columns: 1fr 1fr; } }
+    .card {
+      background: rgba(18, 27, 47, 0.95);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    }
+    .card h2 { margin: 2px 0 10px; font-size: 1.05rem; }
+    label { display: block; margin: 8px 0 6px; color: var(--muted); font-size: .9rem; }
+    input[type="number"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      background: #0d172a;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 10px;
+      font-size: .95rem;
+    }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: .94rem; }
+    th, td { border-bottom: 1px solid var(--line); padding: 10px 8px; text-align: left; }
+    th { color: #cfe2ff; font-weight: 700; }
+    .tag {
+      display: inline-block; padding: 4px 9px; border-radius: 999px;
+      font-size: .78rem; font-weight: 700;
+    }
+    .tag.good { background: rgba(57,217,138,.12); color: #73ebb0; border: 1px solid rgba(57,217,138,.35); }
+    .tag.warn { background: rgba(255,209,102,.12); color: #ffd166; border: 1px solid rgba(255,209,102,.35); }
+    .result { font-size: 1.03rem; margin: 6px 0 0; }
+    .big { font-size: 1.6rem; font-weight: 800; color: var(--accent); }
+    .muted { color: var(--muted); }
+    .note {
+      margin-top: 10px; padding: 10px 12px; border-left: 4px solid var(--warn);
+      background: rgba(255,209,102,.08); color: #ffe6a3; border-radius: 8px;
+      font-size: .88rem;
+    }
+    .kpi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .kpi div { background: #0d172a; border: 1px solid var(--line); border-radius: 12px; padding: 10px; }
+    .kpi b { display:block; margin-top: 4px; font-size: 1.14rem; }
+    footer { margin-top: 14px; color: #89a4c9; font-size: .85rem; }
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>三浦蒸汽鍋爐 vs 其他鍋爐廠：燃燒效率比較分析</h1>
+    <p>
+      這個網頁用可調參數快速比較「<b>實際燃燒效率</b>」與「<b>年化燃料成本</b>」。
+      你可以把數值改成你工廠的運轉資料（天然氣、LPG 都可），系統會即時更新總分與建議。
+    </p>
+
+    <section class="grid cols-2">
+      <div class="card">
+        <h2>1) 基本假設（可調）</h2>
+        <label>年蒸汽需求（噸/年）</label>
+        <input id="steamDemand" type="number" value="48000" min="1000" step="500" />
+
+        <label>每噸蒸汽平均燃料成本（NTD）</label>
+        <input id="fuelCostPerTon" type="number" value="720" min="100" step="10" />
+
+        <label>啟停次數（次/年）</label>
+        <input id="startStop" type="number" value="1800" min="0" step="10" />
+
+        <label>低負載運轉比例（%）</label>
+        <input id="lowLoadRatio" type="number" value="35" min="0" max="100" step="1" />
+
+        <div class="note">
+          分析方法：結合滿載效率 + 啟停損失 + 低負載損失 + 控制精度，得到「等效年平均燃燒效率」。
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>2) 分析結果（即時）</h2>
+        <div class="kpi">
+          <div>
+            <span class="muted">Miura 等效效率</span>
+            <b id="miuraEff">-</b>
+          </div>
+          <div>
+            <span class="muted">其他廠牌等效效率</span>
+            <b id="otherEff">-</b>
+          </div>
+          <div>
+            <span class="muted">效率差距</span>
+            <b id="effGap">-</b>
+          </div>
+        </div>
+
+        <p class="result" id="savingText"></p>
+        <p class="result"><span class="big" id="scoreWinner">-</span></p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top: 16px;">
+      <h2>3) 指標比較（預設可代表一般工業蒸汽場景）</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>指標</th>
+              <th>三浦（示例）</th>
+              <th>其他鍋爐廠（示例）</th>
+              <th>說明</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>滿載燃燒效率</td>
+              <td id="miuraFull">96.0%</td>
+              <td id="otherFull">92.8%</td>
+              <td>基礎熱效率越高，單位蒸汽耗能越低</td>
+            </tr>
+            <tr>
+              <td>啟停損失（每次）</td>
+              <td>0.020%</td>
+              <td>0.045%</td>
+              <td>快速啟停能力會影響全年平均效率</td>
+            </tr>
+            <tr>
+              <td>低負載效率降幅（每 10% 低負載）</td>
+              <td>0.25%</td>
+              <td>0.55%</td>
+              <td>模組化/燃燒控制影響低負載時的燃料浪費</td>
+            </tr>
+            <tr>
+              <td>總體判定</td>
+              <td><span class="tag good">效率優勢</span></td>
+              <td><span class="tag warn">可再優化</span></td>
+              <td>建議以現場實測 O₂、排煙溫度再校正</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <footer>※ 此頁為決策前的快速估算工具；正式採購建議再加入保養、人力、停機風險與壓力曲線評估。</footer>
+    </section>
+  </main>
+
+  <script>
+    const params = {
+      miuraFullLoadEff: 96.0,
+      otherFullLoadEff: 92.8,
+      miuraStartStopLoss: 0.020,
+      otherStartStopLoss: 0.045,
+      miuraLowLoadDropPer10: 0.25,
+      otherLowLoadDropPer10: 0.55,
+      controlBonusMiura: 0.35,
+      controlBonusOther: 0.08
+    };
+
+    const $ = (id) => document.getElementById(id);
+
+    function calcEquivalentEfficiency(full, startLoss, lowDropPer10, startStopCount, lowLoadRatio, controlBonus) {
+      const startStopPenalty = startLoss * (startStopCount / 1000);
+      const lowLoadPenalty = lowDropPer10 * (lowLoadRatio / 10);
+      return Math.max(0, full - startStopPenalty - lowLoadPenalty + controlBonus);
+    }
+
+    function update() {
+      const steamDemand = Number($("steamDemand").value || 0);
+      const fuelCostPerTon = Number($("fuelCostPerTon").value || 0);
+      const startStop = Number($("startStop").value || 0);
+      const lowLoadRatio = Number($("lowLoadRatio").value || 0);
+
+      const miuraEff = calcEquivalentEfficiency(
+        params.miuraFullLoadEff,
+        params.miuraStartStopLoss,
+        params.miuraLowLoadDropPer10,
+        startStop,
+        lowLoadRatio,
+        params.controlBonusMiura
+      );
+
+      const otherEff = calcEquivalentEfficiency(
+        params.otherFullLoadEff,
+        params.otherStartStopLoss,
+        params.otherLowLoadDropPer10,
+        startStop,
+        lowLoadRatio,
+        params.controlBonusOther
+      );
+
+      const miuraFuelUseFactor = 100 / miuraEff;
+      const otherFuelUseFactor = 100 / otherEff;
+      const annualCostMiura = steamDemand * fuelCostPerTon * miuraFuelUseFactor;
+      const annualCostOther = steamDemand * fuelCostPerTon * otherFuelUseFactor;
+      const annualSaving = annualCostOther - annualCostMiura;
+
+      $("miuraEff").textContent = miuraEff.toFixed(2) + "%";
+      $("otherEff").textContent = otherEff.toFixed(2) + "%";
+      $("effGap").textContent = (miuraEff - otherEff).toFixed(2) + "%";
+      $("savingText").innerHTML = `估算年燃料成本差：<b>${Math.round(annualSaving).toLocaleString()} NTD</b>（Miura 相對節省）`;
+
+      const winner = miuraEff > otherEff ? "建議：三浦蒸汽鍋爐在此工況效率更高" : "建議：兩者差異接近，需以實測資料再判定";
+      $("scoreWinner").textContent = winner;
+    }
+
+    ["steamDemand", "fuelCostPerTon", "startStop", "lowLoadRatio"].forEach((id) => {
+      $(id).addEventListener("input", update);
+    });
+
+    update();
+  </script>
+</body>
+</html>
